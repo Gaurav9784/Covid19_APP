@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:tgd_covid_tracker/datasource.dart';
 import 'package:tgd_covid_tracker/pages/countrypage.dart';
@@ -44,6 +45,19 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: Icon(Theme.of(context).brightness == Brightness.light
+                ? Icons.lightbulb_outline
+                : Icons.highlight),
+            onPressed: () {
+              DynamicTheme.of(context).setBrightness(
+                  Theme.of(context).brightness == Brightness.light
+                      ? Brightness.dark
+                      : Brightness.light);
+            },
+          )
+        ],
         title: Text("COVID-19 TRACKER"),
       ),
       body: SingleChildScrollView(

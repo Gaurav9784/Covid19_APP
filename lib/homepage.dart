@@ -33,11 +33,16 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future fetchData() async {
+    fetchWorldWideData();
+    fetchCountryData();
+    print("fetchData called");
+  }
+
   @override
   void initState() {
     //
-    fetchWorldWideData();
-    fetchCountryData();
+    fetchData();
     super.initState();
   }
 
@@ -60,109 +65,112 @@ class _HomePageState extends State<HomePage> {
         ],
         title: Text("COVID-19 TRACKER"),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 100.00,
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(10),
-              color: Colors.orange[100],
-              child: Text(
-                DataSource.quote,
-                style: TextStyle(
-                  color: Colors.orange[800],
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
+      body: RefreshIndicator(
+        onRefresh: fetchData,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 100.00,
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(10),
+                color: Colors.orange[100],
+                child: Text(
+                  DataSource.quote,
+                  style: TextStyle(
+                    color: Colors.orange[800],
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "WORLDWIDE",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return CountryPage();
-                          },
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: primaryBlack,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Text(
-                        "Regional",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "WORLDWIDE",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            worldData == null
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : WorldWidePanel(
-                    worldData: worldData,
-                  ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Text(
-                "Most Affected Countries",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return CountryPage();
+                            },
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: primaryBlack,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Text(
+                          "Regional",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            countryData == null
-                ? Container()
-                : MostAffectedPanel(
-                    countryData: countryData,
+              worldData == null
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : WorldWidePanel(
+                      worldData: worldData,
+                    ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Text(
+                  "Most Affected Countries",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
                   ),
-            SizedBox(
-              height: 5,
-            ),
-            InfoPanel(),
-            SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: Text(
-                "We are together in this fight.".toUpperCase(),
-                style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-          ],
+              SizedBox(
+                height: 10,
+              ),
+              countryData == null
+                  ? Container()
+                  : MostAffectedPanel(
+                      countryData: countryData,
+                    ),
+              SizedBox(
+                height: 5,
+              ),
+              InfoPanel(),
+              SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: Text(
+                  "We are together in this fight.".toUpperCase(),
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
         ),
       ),
     );
